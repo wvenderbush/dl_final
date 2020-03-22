@@ -1,8 +1,10 @@
 import csv
 import requests
 import shutil
+import time
 from pathlib import Path
 from os import path
+import sys
 
 
 # with open('catalog.csv') as csv_file:
@@ -22,8 +24,8 @@ with open('catalog.csv', mode='r', encoding="latin-1") as csv_file:
 	line_count = 0
 	for row in csv_reader:
 		line_count += 1
-		if (line_count > 75):
-			break
+		# if (line_count > 75):
+		# 	break
 
 		#URL String Creator
 		url_string = row["URL"]
@@ -72,26 +74,43 @@ with open('catalog.csv', mode='r', encoding="latin-1") as csv_file:
 		#print(local_path)
 
 		Path(local_path).mkdir(parents=True, exist_ok=True)
-		print(local_path + "/" + img_tag)
+		#print(local_path + "/" + img_tag)
 
 		#Image Downloader
-		if path.exists("img/" + local_path + "/" + img_tag):
+		if path.exists(local_path + "/" + img_tag):
 			print("Already Exists: " + local_path + "/" + img_tag)
+		elif "zzzarchi" in local_path + "/" + img_tag or "zgothic" in local_path + "/" + img_tag or "zearly" in local_path + "/" + img_tag or "zzdeco" in local_path + "/" + img_tag:
+			print("Skipping: "  + local_path + "/" + img_tag)
 		else:
 			image_url = dl_url
-			print(image_url)
-			resp = requests.get(image_url, stream=True)
+			#print(image_url)
+
+
+			retries = 1
+			success = False
+			while not success:
+			    try:
+			        resp = requests.get(image_url, stream=True)
+			        success = True
+			    except Exception as e:
+			        wait = retries * 30;
+			        print('Request Connection Error! Failed for ' + image_url)
+			        print('HTML LINK: ' + url_string)
+			        print('Waiting %s secs and re-trying...' % wait)
+			        sys.stdout.flush()
+			        time.sleep(wait)
+			        retries += 1
+
+			#resp = requests.get(image_url, stream=True)
 			
-			local_url = "img/" + local_path
-			print(str(line_count) + " - Downloading: " + local_url)
+			local_url = local_path
+			print(str(line_count) + " - Downloading: " + local_url + "/" + img_tag)
 			#print(local_url)
-			local_file = open(local_url, 'wb+')
+			local_file = open(local_url + "/" + img_tag, 'wb+')
 			resp.raw.decode_content = True
 			shutil.copyfileobj(resp.raw, local_file)
 			del resp
-
-		
-
+			time.sleep(0.5)
 
 
 		# if line_count == 0:

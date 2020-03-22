@@ -1,0 +1,140 @@
+<html>
+<head>
+<title>Web Gallery of Art has been moved to a new address!</title>
+<BODY BGCOLOR="#F0F6FF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<STYLE type="text/css">
+
+BODY {
+
+  font-size:12px;
+
+  font-family:Arial, Helvetica, sans-serif;
+
+}
+
+P {
+
+	font-size:12px;
+
+	font-family:Arial, Helvetica, sans-serif;
+	
+	margin:15;
+
+}
+
+P.JUSTIFY {
+
+	font-size:12px;
+
+	font-family:Arial, Helvetica, sans-serif;
+
+	text-align:justify;
+
+	text-indent:1em;
+
+}
+
+H1	{
+
+	font-size:20px;
+
+	font-family:Times New Roman, Times, Serif;
+
+	margin:1pt;
+
+	text-align:left;
+	
+	line-height:250%;
+
+}
+
+H2	{
+
+	font-size:16pt;
+
+	font-family:Times New Roman, Times, Serif;
+
+	margin:1pt;
+
+	text-align:center;
+
+}
+
+DIV.STYLE3	{
+
+	font-size:9pt;
+
+	font-family:Times New Roman, Times, Serif;
+
+	margin:1pt;
+
+	text-align:center;
+
+}
+
+TD {
+
+  font-size:11px;
+
+  font-family:Arial, Helvetica, sans-serif;
+
+}
+
+TD.COMMENT {
+
+  font-size:11px;
+
+  font-family:Arial, Helvetica, sans-serif;
+
+  text-align:center;
+
+}
+
+TD.EXP {
+
+  font-size:9pt;
+
+  font-family:Times New Roman, Times, Serif;
+
+  text-align:justify;
+
+  background-color:#FFFFFF;
+
+}
+
+TD.EXP1 {
+
+  font-size:8pt;
+
+  font-family:Arial, Helvetica, sans-serif;
+
+  font-weight:bold;
+
+  text-indent:1em;
+
+  background-color:silver;
+
+}
+
+</STYLE>
+
+<TABLE ALIGN="center" BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="90%">
+	<TR ALIGN="left" VALIGN="middle"><TD><IMG SRC="/support/header/header.gif" alt="Web Gallery of Art: An image collection, virtual museum and searchable database of European fine arts (painting, sculpture) of the Romanesque, Gothic, Renaissance and Baroque periods (1000-1850), containing over 27.600 reproductions. Biographies, commentaries, guided tours, free postcard service are available."></TD></TR>
+	<TR ALIGN="left" VALIGN="middle"><TD><H1>The address has changed!</H1></TD></TR>
+	<TR><TD>
+		<TABLE ALIGN="center" BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="75%">
+			<TR><TD><P>We kindly inform you that the address of the Web Gallery of Art has been changed due to the transfer to a new server. Simultaneously, the structure of the site has been slightly modified and some of the pages have moved. A new design has been also introduced.
+			<P>If you came to this page by following a link of a search engine or by your earlier bookmark it occurred probably because of the above reasons.
+			<P>Please note that the new address is <A HREF="https://www.wga.hu/index.html"><B>https://www.wga.hu/</B></A> and adjust your bookmark accordingly. You are kindly invited to visit the Gallery.
+			<P>Thanks for your patience and your patronage.</TD>
+			<TD><IMG SRC="/support/jpg/red_head.jpg" ALT="Read-headed Youth Holding a Drawing by Giovanni Francesco CAROTO (1488-1562)" BORDER=0></TD>
+			</TR></TABLE></TR>
+	<TR><TD><CENTER><BR><BR><A HREF="https://www.wga.hu/index.html"><IMG SRC="/support/title/enter404.gif" ALT="Entrance to the Web Gallery of Art" BORDER=0></A></CENTER></TD></TR>
+</TABLE>
+<BR><BR>
+<TABLE WIDTH="100%" BORDER=0 CELLPADDING=4>
+<TR><TD CLASS="COMMENT"><IMG SRC="/support/gif/kockak.gif" ALIGN=CENTER></TD></TR>
+<TR><TD CLASS="COMMENT"><B>&copy; Web Gallery of Art, created by <A HREF="/ekren.html">Emil Krén</A> and <A HREF="/dmarx.html">Daniel Marx.</B></A></TD></TR></TABLE>
+<BR>
+</BODY></HTML>
