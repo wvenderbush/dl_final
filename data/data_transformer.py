@@ -12,7 +12,7 @@ img_dict = {}
 
 with open('data_clean.csv', mode='r', encoding="latin-1") as csv_file, open('data_clean_full.csv', mode='w+', encoding="latin-1") as csv_wfile:
 	csv_reader = csv.DictReader(csv_file)
-	csv_writer = csv.DictWriter(csv_wfile, fieldnames=["AUTHOR", "BORN-DIED", "TITLE", "DATE", "TECHNIQUE", "LOCATION", "URL", "FORM", "TYPE", "SCHOOL", "TIMELINE", "RAW_URL", "PATH", "ARTIST_RAW", "INITIAL"])
+	csv_writer = csv.DictWriter(csv_wfile, fieldnames=["AUTHOR", "BORN-DIED", "TITLE", "DATE", "TECHNIQUE", "LOCATION", "URL", "FORM", "TYPE", "SCHOOL", "TIMELINE", "RAW_URL", "SPLIT_PATH", "PATH", "ARTIST_RAW", "INITIAL"])
 	csv_writer.writeheader()
 	line_count = 0
 	for row in csv_reader:
@@ -64,17 +64,22 @@ with open('data_clean.csv', mode='r', encoding="latin-1") as csv_file, open('dat
 		dir2 = url_post[url_1_slash + 1:url_2_slash] + url_add
 
 		local_path = "img/" + dir1 + "/" + dir2
+		new_path_stem = "img/all/"
+		new_path = new_path_stem + img_tag
 		#print(local_path)
 
 		Path(local_path).mkdir(parents=True, exist_ok=True)
+		Path(new_path_stem).mkdir(parents=True, exist_ok=True)
 		#print(local_path + "/" + img_tag)
 
 		#Image Sorter
 		total_path = local_path + "/" + img_tag
 		cut_path = total_path
-		if path.exists(total_path):
+		if path.exists(total_path) and path.exists(new_path_stem):
+			shutil.copy(total_path, new_path_stem)
 			row["RAW_URL"] = dl_url
-			row["PATH"] = total_path
+			row["SPLIT_PATH"] = total_path
+			row["PATH"] = new_path
 			row["ARTIST_RAW"] = dir2
 			row["INITIAL"] = dir1
 			print(row)
