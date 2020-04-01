@@ -57,16 +57,31 @@ def exp_stats(frame):
 	t_w = []
 	t_h = []
 	for p, t in zip(aps, times):
-		image = Image.open("data/" + p)
-		width, height = image.size
-		t_w.append(width)
-		t_h.append(height)
+		#image = Image.open("data/" + p)
+		#width, height = image.size
+		#t_w.append(width)
+		#t_h.append(height)
 		t_dict[t] += 1
-		image.close()
-	print("Median Width: " + str(stats.median(t_w)))
-	print("Median Height: " + str(stats.median(t_h)))
+		#image.close()
+	#print("Median Width: " + str(stats.median(t_w)))
+	#print("Median Height: " + str(stats.median(t_h)))
 	for i in sorted(t_set):
 		print(str(i) + ": " + str(t_dict[i]))
+
+	objects = sorted(t_set)
+	y_pos = objects[7:]
+	print(y_pos)
+	#y_pos = np.arange(len(objects))
+	performance = []
+	for i in y_pos:
+		performance.append(t_dict[i])
+
+	plt.bar(y_pos, performance, align='center', alpha=0.5)
+	plt.xticks(y_pos, y_pos)
+	plt.ylabel('Data Points')
+	plt.title('Data Sparsity')
+
+	plt.show()
 
 
 
@@ -75,7 +90,7 @@ if __name__ == '__main__':
 	dataset = PaintingDataset()
 	#print(len(dataset))
 	#print(dataset[20])
-	#exp_stats(grab_frame('data/data_clean_full.csv'))
+	exp_stats(grab_frame('data/data_clean_full.csv'))
 	#print(grab_labels())
 
 
