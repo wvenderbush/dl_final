@@ -46,7 +46,7 @@ def grab_frame(frame_path):
 
 
 def exp_stats(frame):
-	frame.describe()
+	print(frame.describe())
 	times = frame["TIMELINE"]
 	t_set = set(times)
 	t_dict = {}
@@ -68,20 +68,22 @@ def exp_stats(frame):
 	for i in sorted(t_set):
 		print(str(i) + ": " + str(t_dict[i]))
 
-	objects = sorted(t_set)
-	y_pos = objects[7:]
-	print(y_pos)
-	#y_pos = np.arange(len(objects))
-	performance = []
-	for i in y_pos:
-		performance.append(t_dict[i])
+	# objects = sorted(t_set)
+	# y_pos = objects[7:]
+	# print(y_pos)
+	# #y_pos = np.arange(len(objects))
+	# performance = []
+	# for i in y_pos:
+	# 	performance.append(t_dict[i])
 
-	plt.bar(y_pos, performance, align='center', alpha=0.5)
-	plt.xticks(y_pos, y_pos)
-	plt.ylabel('Data Points')
-	plt.title('Data Sparsity')
+	# print("Total Data Points: " + str(sum(performance)))
 
-	plt.show()
+	# plt.bar(y_pos, performance, align='center', alpha=0.5)
+	# plt.xticks(y_pos, y_pos)
+	# plt.ylabel('Data Points')
+	# plt.title('Data Sparsity')
+
+	# plt.show()
 
 
 
