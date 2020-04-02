@@ -34,7 +34,9 @@ class PaintingDataset(Dataset):
 	def __getitem__(self, index):
 		img_name = self.images[index]
 		img_obj = Image.open("data/" + img_name)
-		img_tensor = self.to_tensor(img_obj)
+		# if self.transform != None: # TODO: DOING THIS ON THE FLY ALL THE TIME MIGHT BE COSTLY, WINSTON, CAN YOU FIND A WAY TO PREPARE THIS IN INIT?
+		img_tensor = self.transform(img_obj)
+		# img_tensor = self.to_tensor(img_obj)
 		img_label = self.labels[index]
 
 		return (img_tensor, img_label)
