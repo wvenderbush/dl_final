@@ -8,10 +8,11 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 
+
 from torch.autograd import Variable
 import torch.nn.functional as F
 from data_loader import PaintingDataset
-
+from torch.utils.data import random_split
 
 
 seed = 42
@@ -27,10 +28,16 @@ print(1)
 transform = transforms.Compose([transforms.Resize((512, 512)), transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 print(2)
 dataset = PaintingDataset(transform=transform)
+
+train_set, val_set, test_set = random_split(dataset, (int(len(dataset)*0.8),
+                                                      int(len(dataset)*0.1),
+                                                      len(dataset)-int(len(dataset)*0.8)-int(len(dataset)*0.1)))
+
+print(type(train_set))
 print(3)
-train_set = dataset #TODO #torchvision.datasets.CIFAR10(root='./cifardata', train=True, download=True, transform=transform)
+#train_set = dataset #TODO #torchvision.datasets.CIFAR10(root='./cifardata', train=True, download=True, transform=transform)
 print(5)
-test_set = dataset #TODO #torchvision.datasets.CIFAR10(root='./cifardata', train=False, download=True, transform=transform)
+#test_set = dataset #TODO #torchvision.datasets.CIFAR10(root='./cifardata', train=False, download=True, transform=transform)
 print(6)
 
 # trnsfrm = transforms.Resize((512, 512))
@@ -57,16 +64,16 @@ from torch.utils.data.sampler import SubsetRandomSampler
 n_samples = len(dataset)
 
 #Training
-n_training_samples = n_samples*0.1 # TODO
-train_sampler = SubsetRandomSampler(np.arange(n_training_samples, dtype=np.int64))
+#n_training_samples = n_samples*0.1 # TODO
+train_sampler = SubsetRandomSampler(np.arange(len(train_set), dtype=np.int64))
 print(7)
 #Validation
-n_val_samples = n_samples*0.01 # TODO
-val_sampler = SubsetRandomSampler(np.arange(n_training_samples, n_training_samples + n_val_samples, dtype=np.int64))
+#n_val_samples = n_samples*0.01 # TODO
+val_sampler = SubsetRandomSampler(np.arange(len(val_set), dtype=np.int64))
 print(8)
 #Test
-n_test_samples = n_samples*0.01 # TODO
-test_sampler = SubsetRandomSampler(np.arange(n_test_samples, dtype=np.int64))
+#n_test_samples = n_samples*0.01 # TODO
+test_sampler = SubsetRandomSampler(np.arange(len(test_set), dtype=np.int64))
 print(9)
 # B) CLASS FOR CNN!!!
 
@@ -102,8 +109,9 @@ class SimpleCNN(torch.nn.Module):
         ###256x64 input features, 64 output features (see sizing flow below)
         # self.fc2 = torch.nn.Linear(64 * 256, 64)
         # print('f')
-        #64 input features, 10 output features for our 10 defined classes
-        self.fc3 = torch.nn.Linear(64, 10)
+        ###FBAJDBCKJASVCDIJKNDLKCBADBCKASBJWB C   TODO   CHANGE THIS BACK
+        #64 input features, 18* output features for our 18* defined classes
+        self.fc3 = torch.nn.Linear(64, 18)
         print('g')
         
     def forward(self, x):
@@ -164,6 +172,38 @@ def createLossAndOptimizer(net, learning_rate=0.001):
     
     return(loss, optimizer)
 
+##Dict = dict({'1401-1450': torch.tensor([1, 0, 0, 0, 0, 0, 0, 0, 0, 0]).double(),
+##             '1451-1500': torch.tensor([0, 1, 0, 0, 0, 0, 0, 0, 0, 0]).double(),
+##             '1501-1550': torch.tensor([0, 0, 1, 0, 0, 0, 0, 0, 0, 0]).double(),
+##             '1551-1600': torch.tensor([0, 0, 0, 1, 0, 0, 0, 0, 0, 0]).double(),
+##             '1601-1650': torch.tensor([0, 0, 0, 0, 1, 0, 0, 0, 0, 0]).double(),
+##             '1651-1700': torch.tensor([0, 0, 0, 0, 0, 1, 0, 0, 0, 0]).double(),
+##             '1701-1750': torch.tensor([0, 0, 0, 0, 0, 0, 1, 0, 0, 0]).double(),
+##             '1751-1800': torch.tensor([0, 0, 0, 0, 0, 0, 0, 1, 0, 0]).double(),
+##             '1801-1850': torch.tensor([0, 0, 0, 0, 0, 0, 0, 0, 1, 0]).double(),
+##             '1851-1900': torch.tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 1]).double()}) 
+
+
+## TODO
+Dict = dict({'1401-1450': 0,
+             '1451-1500': 1,
+             '1501-1550': 2,
+             '1551-1600': 3,
+             '1601-1650': 4,
+             '1651-1700': 5,
+             '1701-1750': 6,
+             '1751-1800': 7,
+             '1801-1850': 8,
+             '1851-1900': 9,
+             '1001-1050': 10,
+             '1051-1100': 11,
+             '1101-1150': 12,
+             '1151-1200': 13,
+             '1201-1250': 14,
+             '1251-1300': 15,
+             '1301-1350': 16,
+             '1351-1400': 17}) 
+
 import time
 print(11)
 def trainNet(net, batch_size, n_epochs, learning_rate):
@@ -196,6 +236,13 @@ def trainNet(net, batch_size, n_epochs, learning_rate):
         for i, data in enumerate(train_loader, 0):
             #Get inputs
             inputs, labels = data
+            one_hot_labels = []
+            for label in labels:
+                try:
+                    one_hot_labels.append(Dict[label])
+                except KeyError:
+                    continue
+            labels = torch.tensor(one_hot_labels)
             print(inputs)
             print(labels)
             
@@ -212,20 +259,28 @@ def trainNet(net, batch_size, n_epochs, learning_rate):
             optimizer.step()
             
             #Print statistics
-            running_loss += loss_size.data[0]
-            total_train_loss += loss_size.data[0]
+            running_loss += loss_size.item()
+            total_train_loss += loss_size.item()
             
-            #Print every 10th batch of an epoch
-            if (i + 1) % (print_every + 1) == 0:
-                print("Epoch {}, {:d}% \t train_loss: {:.2f} took: {:.2f}s".format(
-                        epoch+1, int(100 * (i+1) / n_batches), running_loss / print_every, time.time() - start_time))
-                #Reset running loss and time
-                running_loss = 0.0
-                start_time = time.time()
+            #Print every 10th batch of an epoch TODO
+##            if (i + 1) % (print_every + 1) == 0:
+##                print("Epoch {}, {:d}% \t train_loss: {:.2f} took: {:.2f}s".format(
+##                        epoch+1, int(100 * (i+1) / n_batches), running_loss / print_every, time.time() - start_time))
+##                #Reset running loss and time
+##                running_loss = 0.0
+##                start_time = time.time()
             
         #At the end of the epoch, do a pass on the validation set
         total_val_loss = 0
         for inputs, labels in val_loader:
+
+            one_hot_labels = []
+            for label in labels:
+                try:
+                    one_hot_labels.append(Dict[label])
+                except KeyError:
+                    continue
+            labels = torch.tensor(one_hot_labels)
             
             #Wrap tensors in Variables
             inputs, labels = Variable(inputs), Variable(labels)
@@ -233,7 +288,7 @@ def trainNet(net, batch_size, n_epochs, learning_rate):
             #Forward pass
             val_outputs = net(inputs)
             val_loss_size = loss(val_outputs, labels)
-            total_val_loss += val_loss_size.data[0]
+            total_val_loss += val_loss_size.item()
             
         print("Validation loss = {:.2f}".format(total_val_loss / len(val_loader)))
         
@@ -241,6 +296,7 @@ def trainNet(net, batch_size, n_epochs, learning_rate):
 print(12)
 CNN = SimpleCNN()
 print(13)
+# TODO
 trainNet(CNN, batch_size=32, n_epochs=5, learning_rate=0.001)
 print(14)
   
