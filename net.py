@@ -1,5 +1,3 @@
-# SOURCE: https://algorithmia.com/blog/convolutional-neural-nets-in-pytorch 
-
 # 1) decide on size of the embedding layer
 # 2) figure out how to download images for training
 
