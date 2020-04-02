@@ -33,7 +33,7 @@ class PaintingDataset(Dataset):
 
 	def __getitem__(self, index):
 		img_name = self.images[index]
-		img_obj = Image.open(img_name)
+		img_obj = Image.open("data/" + img_name)
 		img_tensor = self.to_tensor(img_obj)
 		img_label = self.labels[index]
 
