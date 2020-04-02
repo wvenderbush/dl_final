@@ -82,8 +82,9 @@ with open('data_clean.csv', mode='r', encoding="latin-1") as csv_file, open('dat
 			row["PATH"] = new_path
 			row["ARTIST_RAW"] = dir2
 			row["INITIAL"] = dir1
-			print(row)
-			csv_writer.writerow(row)
+			#print(row)
+			if row["TIMELINE"] != "1051-1100" and row["TIMELINE"] != "1101-1150" and row["TIMELINE"] != "1151-1200" and row["TIMELINE"] != "1201-1250" and row["TIMELINE"] != "1251-1300" and row["TIMELINE"] != "1301-1350" and row["TIMELINE"] != "1351-1400":
+				csv_writer.writerow(row)
 			# #img = Image.open(total_path)
 			# img = 0
 			# curr_dict = {}
