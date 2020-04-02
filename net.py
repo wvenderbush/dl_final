@@ -13,6 +13,7 @@ import torch.nn.functional as F
 from data_loader import PaintingDataset
 
 
+
 seed = 42
 np.random.seed(seed)
 torch.manual_seed(seed)
@@ -23,7 +24,7 @@ torch.manual_seed(seed)
 #transforms.ToTensor() converts our PILImage to a tensor of shape (C x H x W) in the range [0,1]
 #transforms.Normalize(mean,std) normalizes a tensor to a (mean, std) for (R, G, B)
 print(1)
-transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+transform = transforms.Compose([transforms.Resize((512, 512)), transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 print(2)
 dataset = PaintingDataset(transform=transform)
 print(3)
@@ -31,8 +32,25 @@ train_set = dataset #TODO #torchvision.datasets.CIFAR10(root='./cifardata', trai
 print(5)
 test_set = dataset #TODO #torchvision.datasets.CIFAR10(root='./cifardata', train=False, download=True, transform=transform)
 print(6)
-classes = ('1401-1450', '1451-1500', '1501-1550', '1551-1600',
-           '1601-1650', '1651-1700', '1701-1750', '1751-1800', '1801-1850', '1851-1900')
+
+# trnsfrm = transforms.Resize((512, 512))
+# import matplotlib.pyplot as plt
+# # Check for scaling
+# plt.figure()
+
+# plt.subplot(1, 2, 1)
+
+# plt.imshow(dataset[0][0]) # PYPLOT WANTS AN img_obj as in __getitem__
+
+# plt.subplot(1, 2, 2)
+# sampleTransformed = trnsfrm(dataset[0][0])
+# plt.imshow(sampleTransformed)
+
+
+# plt.show()
+
+classes = {'1401-1450', '1451-1500', '1501-1550', '1551-1600',
+           '1601-1650', '1651-1700', '1701-1750', '1751-1800', '1801-1850', '1851-1900'}
 
 from torch.utils.data.sampler import SubsetRandomSampler
 
@@ -120,7 +138,7 @@ def outputSize(in_size, kernel_size, stride, padding):
 
     output = int((in_size - kernel_size + 2*(padding)) / stride) + 1
 
-    return(output)
+    return output
   
 # C) TRAINING THE NEURAL NET
 
@@ -128,7 +146,7 @@ def outputSize(in_size, kernel_size, stride, padding):
 def get_train_loader(batch_size):
     train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size,
                                            sampler=train_sampler, num_workers=2)
-    return(train_loader)
+    return train_loader
 
 #Test and validation loaders have constant batch sizes, so we can define them directly
 test_loader = torch.utils.data.DataLoader(test_set, batch_size=4, sampler=test_sampler, num_workers=2)
@@ -176,9 +194,10 @@ def trainNet(net, batch_size, n_epochs, learning_rate):
         total_train_loss = 0
         
         for i, data in enumerate(train_loader, 0):
-            
             #Get inputs
             inputs, labels = data
+            print(inputs)
+            print(labels)
             
             #Wrap them in a Variable object
             inputs, labels = Variable(inputs), Variable(labels)
