@@ -15,6 +15,8 @@ from torch.utils.data import Dataset
 from torchvision import datasets, transforms
 import matplotlib.pyplot as plt; plt.rcdefaults()
 import matplotlib.pyplot as plt
+#from scipy.misc import imsave, imresize
+from matplotlib.pyplot import imread
 
 
 class PaintingDataset(Dataset):
@@ -70,31 +72,53 @@ def exp_stats(frame):
 	for i in sorted(t_set):
 		print(str(i) + ": " + str(t_dict[i]))
 
-	# objects = sorted(t_set)
-	# y_pos = objects[7:]
-	# print(y_pos)
-	# #y_pos = np.arange(len(objects))
-	# performance = []
-	# for i in y_pos:
-	# 	performance.append(t_dict[i])
+	objects = sorted(t_set)
+	y_pos = objects
+	print(y_pos)
+	#y_pos = np.arange(len(objects))
+	performance = []
+	for i in y_pos:
+		performance.append(t_dict[i])
 
-	# print("Total Data Points: " + str(sum(performance)))
+	print("Total Data Points: " + str(sum(performance)))
 
-	# plt.bar(y_pos, performance, align='center', alpha=0.5)
-	# plt.xticks(y_pos, y_pos)
-	# plt.ylabel('Data Points')
-	# plt.title('Data Sparsity')
+	plt.bar(y_pos, performance, align='center', alpha=0.5)
+	plt.xticks(y_pos, y_pos)
+	plt.ylabel('Data Points')
+	plt.title('Data Sparsity')
 
-	# plt.show()
+	plt.show()
+
+def p_bw(frame):
+	aps = frame["PATH"]
+	t = len(aps)
+	bw = 0
+	c = 0
+	count = 1
+	for p in aps:
+		print("Picture: " + str(count) + "/" + str(t))
+		image = imread("data/" + p)
+		if(len(image.shape)<3):
+		      bw += 1
+		else:
+		      c += 1
+		count += 1
+	print("B/W: " + str(bw / t * 100) + "%")
+	print("Color: " + str(c / t * 100) + "%")
 
 
 
 
-if __name__ == '__main__':
-	dataset = PaintingDataset()
+
+
+
+
+#if __name__ == '__main__':
+	#dataset = PaintingDataset()
 	#print(len(dataset))
 	#print(dataset[20])
-	exp_stats(grab_frame('data/data_clean_full.csv'))
+	#exp_stats(grab_frame('data/data_clean_full.csv'))
+	#p_bw(grab_frame('data/data_clean_full.csv'))
 	#print(grab_labels())
 
 
