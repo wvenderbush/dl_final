@@ -57,10 +57,11 @@ def exp_stats(frame):
 	print(t_set)
 	for i in t_set:
 		t_dict[i] = 0
-	aps = frame["PATH"]
+	#aps = frame["PATH"]
 	t_w = []
 	t_h = []
-	for p, t in zip(aps, times):
+	#for p, t in zip(aps, times):
+	for t in times:
 		#image = Image.open("data/" + p)
 		#width, height = image.size
 		#t_w.append(width)
@@ -84,27 +85,28 @@ def exp_stats(frame):
 
 	plt.bar(y_pos, performance, align='center', alpha=0.5)
 	plt.xticks(y_pos, y_pos)
+	plt.xticks(rotation=90)
 	plt.ylabel('Data Points')
 	plt.title('Data Sparsity')
 
 	plt.show()
 
-def p_bw(frame):
-	aps = frame["PATH"]
-	t = len(aps)
-	bw = 0
-	c = 0
-	count = 1
-	for p in aps:
-		print("Picture: " + str(count) + "/" + str(t))
-		image = imread("data/" + p)
-		if(len(image.shape)<3):
-		      bw += 1
-		else:
-		      c += 1
-		count += 1
-	print("B/W: " + str(bw / t * 100) + "%")
-	print("Color: " + str(c / t * 100) + "%")
+# def p_bw(frame):
+# 	aps = frame["PATH"]
+# 	t = len(aps)
+# 	bw = 0
+# 	c = 0
+# 	count = 1
+# 	for p in aps:
+# 		print("Picture: " + str(count) + "/" + str(t))
+# 		image = imread("data/" + p)
+# 		if(len(image.shape)<3):
+# 		      bw += 1
+# 		else:
+# 		      c += 1
+# 		count += 1
+# 	print("B/W: " + str(bw / t * 100) + "%")
+# 	print("Color: " + str(c / t * 100) + "%")
 
 
 
@@ -113,11 +115,11 @@ def p_bw(frame):
 
 
 
-#if __name__ == '__main__':
+if __name__ == '__main__':
 	#dataset = PaintingDataset()
 	#print(len(dataset))
 	#print(dataset[20])
-	#exp_stats(grab_frame('data/data_clean_full.csv'))
+	exp_stats(grab_frame('data/catalog.csv'))
 	#p_bw(grab_frame('data/data_clean_full.csv'))
 	#print(grab_labels())
 
