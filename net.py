@@ -27,9 +27,9 @@ transform = transforms.Compose([transforms.Resize((256, 256)), transforms.ToTens
 # print(2)
 dataset = PaintingDataset(transform=transform)
 
-train_set, val_set, test_set = random_split(dataset, (int(len(dataset)*0.1),
-                                                      int(len(dataset)*0.1),
-                                                      len(dataset)-int(len(dataset)*0.1)-int(len(dataset)*0.1)))
+train_set, val_set, test_set = random_split(dataset, (int(len(dataset)*0.01),
+                                                      int(len(dataset)*0.01),
+                                                      len(dataset)-int(len(dataset)*0.01)-int(len(dataset)*0.01)))
 
 # print(type(train_set))
 # print(3)
@@ -85,27 +85,27 @@ class SimpleCNN(torch.nn.Module):
         super(SimpleCNN, self).__init__()
         # print('b')
         
-        #512x512x3
+        #256x256x3
         #Input channels = 3, output channels = 64
         self.conv1 = torch.nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1)
         # print('c')
-        #512x512x64
-        self.pool = torch.nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
+        #256x256x64
+        self.pool1 = torch.nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
         # print('d')
         
         #256x256x64
-        #self.conv2 = torch.nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1)
+        self.conv2 = torch.nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1)
         #512x512x64
-        #self.pool2 = torch.nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
+        self.pool2 = torch.nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
         
         
         
-        ###256x256x64 input features, 64x256 output features (see sizing flow below)
-        self.fc1 = torch.nn.Linear(64 * 128 * 128, 64)
+        ###128x128x64 input features, 64x128 output features (see sizing flow below)
+        self.fc1 = torch.nn.Linear(128 * 64 * 64, 128)
         # print('e')
         
         ###256x64 input features, 64 output features (see sizing flow below)
-        # self.fc2 = torch.nn.Linear(64 * 256, 64)
+        self.fc2 = torch.nn.Linear(128, 64)
         # print('f')
         ###FBAJDBCKJASVCDIJKNDLKCBADBCKASBJWB C   TODO   CHANGE THIS BACK
         #64 input features, 18* output features for our 18* defined classes
@@ -119,12 +119,16 @@ class SimpleCNN(torch.nn.Module):
         x = F.relu(self.conv1(x))
         
         #Size changes from (64, 512, 512) to (64, 256, 256)
-        x = self.pool(x)
+        x = self.pool1(x)
+
+        x = F.relu(self.conv2(x))
+
+        x = self.pool2(x)
         
         #Reshape data to input to the input layer of the neural net
         #Size changes from (64, 256, 256) to (1, 64x256x256)
         #Recall that the -1 infers this dimension from the other given dimension
-        x = x.view(-1, 64 * 128 * 128)
+        x = x.view(-1, 128 * 64 * 64)
         
         #Computes the activation of the first fully connected layer
         #Size changes from (1, 64x256x256) to (1, 64x256)
@@ -132,7 +136,7 @@ class SimpleCNN(torch.nn.Module):
         
         #Computes the activation of the second fully connected layer
         #Size changes from (1, 64x256) to (1, 64)
-        # x = F.relu(self.fc2(x))
+        x = F.relu(self.fc2(x))
         
         #Computes the second fully connected layer (activation applied later)
         #Size changes from (1, 64) to (1, 10)
@@ -170,20 +174,32 @@ def createLossAndOptimizer(net, learning_rate=0.001):
     
     return(loss, optimizer)
 
-##Dict = dict({'1401-1450': torch.tensor([1, 0, 0, 0, 0, 0, 0, 0, 0, 0]).double(),
-##             '1451-1500': torch.tensor([0, 1, 0, 0, 0, 0, 0, 0, 0, 0]).double(),
-##             '1501-1550': torch.tensor([0, 0, 1, 0, 0, 0, 0, 0, 0, 0]).double(),
-##             '1551-1600': torch.tensor([0, 0, 0, 1, 0, 0, 0, 0, 0, 0]).double(),
-##             '1601-1650': torch.tensor([0, 0, 0, 0, 1, 0, 0, 0, 0, 0]).double(),
-##             '1651-1700': torch.tensor([0, 0, 0, 0, 0, 1, 0, 0, 0, 0]).double(),
-##             '1701-1750': torch.tensor([0, 0, 0, 0, 0, 0, 1, 0, 0, 0]).double(),
-##             '1751-1800': torch.tensor([0, 0, 0, 0, 0, 0, 0, 1, 0, 0]).double(),
-##             '1801-1850': torch.tensor([0, 0, 0, 0, 0, 0, 0, 0, 1, 0]).double(),
-##             '1851-1900': torch.tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 1]).double()}) 
+# Dict = dict({'1401-1450': torch.tensor([1, 0, 0, 0, 0, 0, 0, 0, 0, 0]).double(),
+#             '1451-1500': torch.tensor([0, 1, 0, 0, 0, 0, 0, 0, 0, 0]).double(),
+#             '1501-1550': torch.tensor([0, 0, 1, 0, 0, 0, 0, 0, 0, 0]).double(),
+#             '1551-1600': torch.tensor([0, 0, 0, 1, 0, 0, 0, 0, 0, 0]).double(),
+#             '1601-1650': torch.tensor([0, 0, 0, 0, 1, 0, 0, 0, 0, 0]).double(),
+#             '1651-1700': torch.tensor([0, 0, 0, 0, 0, 1, 0, 0, 0, 0]).double(),
+#             '1701-1750': torch.tensor([0, 0, 0, 0, 0, 0, 1, 0, 0, 0]).double(),
+#             '1751-1800': torch.tensor([0, 0, 0, 0, 0, 0, 0, 1, 0, 0]).double(),
+#             '1801-1850': torch.tensor([0, 0, 0, 0, 0, 0, 0, 0, 1, 0]).double(),
+#             '1851-1900': torch.tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 1]).double()}) 
+
+
+# Dict = dict({'1401-1450': torch.tensor([1, 0, 0, 0, 0, 0, 0, 0, 0, 0]).double(),
+#             '1451-1500': torch.tensor([0, 1, 0, 0, 0, 0, 0, 0, 0, 0]).double(),
+#             '1501-1550': torch.tensor([0, 0, 1, 0, 0, 0, 0, 0, 0, 0]).double(),
+#             '1551-1600': torch.tensor([0, 0, 0, 1, 0, 0, 0, 0, 0, 0]).double(),
+#             '1601-1650': torch.tensor([0, 0, 0, 0, 1, 0, 0, 0, 0, 0]).double(),
+#             '1651-1700': torch.tensor([0, 0, 0, 0, 0, 1, 0, 0, 0, 0]).double(),
+#             '1701-1750': torch.tensor([0, 0, 0, 0, 0, 0, 1, 0, 0, 0]).double(),
+#             '1751-1800': torch.tensor([0, 0, 0, 0, 0, 0, 0, 1, 0, 0]).double(),
+#             '1801-1850': torch.tensor([0, 0, 0, 0, 0, 0, 0, 0, 1, 0]).double(),
+#             '1851-1900': torch.tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 1]).double()}) 
 
 
 ## TODO
-Dict = dict({'1401-1450': 0,
+Dict = {'1401-1450': 0,
              '1451-1500': 1,
              '1501-1550': 2,
              '1551-1600': 3,
@@ -192,7 +208,7 @@ Dict = dict({'1401-1450': 0,
              '1701-1750': 6,
              '1751-1800': 7,
              '1801-1850': 8,
-             '1851-1900': 9}) 
+             '1851-1900': 9}
 
 import time
 # print(11)
@@ -220,11 +236,13 @@ def trainNet(net, batch_size, n_epochs, learning_rate):
     for epoch in range(n_epochs):
         # print (17)
         running_loss = 0.0
-        print_every = 3#n_batches // 10
+        print_every = 3#n_batches // 20
         start_time = time.time()
         total_train_loss = 0
         # print(19)
         # print(len(train_loader))
+        total_tested = 0
+        total_correct = 0
         for i, data in enumerate(train_loader):
             # print(i)
             #Get inputs
@@ -235,13 +253,21 @@ def trainNet(net, batch_size, n_epochs, learning_rate):
                     one_hot_labels.append(Dict[label])
                 except KeyError:
                     continue
+
+            # for i in range(len(one_hot_labels)):
+                # one_hot_labels[i] = one_hot_labels[i].unsqueeze(0)
+            # print(one_hot_labels)
+
+            # labels = torch.cat(one_hot_labels, 0)
             labels = torch.tensor(one_hot_labels)
+
             # print(19.1)
             # print(inputs, flush=True)
             # print(labels, flush=True)
             
             #Wrap them in a Variable object
             inputs, labels = Variable(inputs), Variable(labels)
+            # print(labels)
             
             #Set the parameter gradients to zero
             optimizer.zero_grad()
@@ -250,9 +276,19 @@ def trainNet(net, batch_size, n_epochs, learning_rate):
             # print(19.2)
 
             outputs = net(inputs)
+            # print(torch.tensor([int(x.max(0)[1]) for x in outputs]))
+            # print(labels)
             loss_size = loss(outputs, labels)
             loss_size.backward()
             optimizer.step()
+
+
+            predicted_labels = torch.tensor([int(x.max(0)[1]) for x in outputs])
+            true_labels = labels
+            for ii in range(len(predicted_labels)):
+                total_tested += 1
+                if predicted_labels[ii] == true_labels[ii]:
+                    total_correct += 1
             
             
             #Print statistics
@@ -267,14 +303,19 @@ def trainNet(net, batch_size, n_epochs, learning_rate):
                #Reset running loss and time
                running_loss = 0.0
                start_time = time.time()
+
+        print("Accuracy of test set: ", total_correct/total_tested)
+
         # print(20, flush=True)
         #At the end of the epoch, do a pass on the validation set
         total_val_loss = 0
-        j=0
+        # j=0
+        total_tested = 0
+        total_correct = 0
         for inputs, labels in val_loader:
             # print(len(val_loader))
             # print(j)
-            j += 1
+            # j += 1
 
             one_hot_labels = []
             for label in labels:
@@ -293,10 +334,20 @@ def trainNet(net, batch_size, n_epochs, learning_rate):
             #Forward pass
             val_outputs = net(inputs)
             # print(20.4)
+            predicted_labels = torch.tensor([int(x.max(0)[1]) for x in val_outputs])
+
+            true_labels = labels
+            for ii in range(len(predicted_labels)):
+                total_tested += 1
+                if predicted_labels[ii] == true_labels[ii]:
+                    total_correct += 1
+
             val_loss_size = loss(val_outputs, labels)
             # print(20.5)
             total_val_loss += val_loss_size.item()
             # print(20.6)
+            # print(predicted_labels, true_labels)
+        print("Accuracy of validation set: ", total_correct/total_tested)
             
         print("Validation loss = {:.2f}".format(total_val_loss / len(val_loader)))
         
@@ -307,4 +358,6 @@ CNN = SimpleCNN()
 # TODO
 trainNet(CNN, batch_size=32, n_epochs=5, learning_rate=0.001) # TODO: Batchsize original was 32
 # print(14)
+
+torch.save(CNN.state_dict(), './CNN.pth')
   
