@@ -27,9 +27,9 @@ transform = transforms.Compose([transforms.Resize((256, 256)), transforms.ToTens
 # print(2)
 dataset = PaintingDataset(transform=transform)
 
-train_set, val_set, test_set = random_split(dataset, (int(len(dataset)*0.01),
-                                                      int(len(dataset)*0.01),
-                                                      len(dataset)-int(len(dataset)*0.01)-int(len(dataset)*0.01)))
+train_set, val_set, test_set = random_split(dataset, (int(len(dataset)*0.1),
+                                                      int(len(dataset)*0.1),
+                                                      len(dataset)-int(len(dataset)*0.1)-int(len(dataset)*0.1)))
 
 # print(type(train_set))
 # print(3)
@@ -84,6 +84,8 @@ class SimpleCNN(torch.nn.Module):
         # print('a')
         super(SimpleCNN, self).__init__()
         # print('b')
+        self.training = True
+        self.dropout = 0
         
         #256x256x3
         #Input channels = 3, output channels = 64
@@ -133,6 +135,8 @@ class SimpleCNN(torch.nn.Module):
         #Computes the activation of the first fully connected layer
         #Size changes from (1, 64x256x256) to (1, 64x256)
         x = F.relu(self.fc1(x))
+
+        x = F.dropout(x, training=self.training, p=self.dropout)
         
         #Computes the activation of the second fully connected layer
         #Size changes from (1, 64x256) to (1, 64)
@@ -164,13 +168,13 @@ val_loader = torch.utils.data.DataLoader(train_set, batch_size=32, sampler=val_s
 
 import torch.optim as optim
 
-def createLossAndOptimizer(net, learning_rate=0.001):
+def createLossAndOptimizer(net, learning_rate=0.001, weight_decay=0.0):
     
     #Loss function
     loss = torch.nn.CrossEntropyLoss()
     
     #Optimizer
-    optimizer = optim.Adam(net.parameters(), lr=learning_rate)
+    optimizer = optim.Adam(net.parameters(), lr=learning_rate, weight_decay=weight_decay)
     
     return(loss, optimizer)
 
@@ -212,7 +216,7 @@ Dict = {'1401-1450': 0,
 
 import time
 # print(11)
-def trainNet(net, batch_size, n_epochs, learning_rate):
+def trainNet(net, batch_size, n_epochs, learning_rate, weight_decay):
     
     #Print all of the hyperparameters of the training iteration:
     print("===== HYPERPARAMETERS =====")
@@ -227,16 +231,17 @@ def trainNet(net, batch_size, n_epochs, learning_rate):
     n_batches = len(train_loader)
 
     #Create our loss and optimizer functions
-    loss, optimizer = createLossAndOptimizer(net, learning_rate)
+    loss, optimizer = createLossAndOptimizer(net, learning_rate, weight_decay)
     # print(16)
     #Time for printing
     training_start_time = time.time()
     
     #Loop for n_epochs
     for epoch in range(n_epochs):
+        net.training = True if net.dropout > 0 else False
         # print (17)
         running_loss = 0.0
-        print_every = 3#n_batches // 20
+        print_every = 1#n_batches // 20
         start_time = time.time()
         total_train_loss = 0
         # print(19)
@@ -304,7 +309,7 @@ def trainNet(net, batch_size, n_epochs, learning_rate):
                running_loss = 0.0
                start_time = time.time()
 
-        print("Accuracy of test set: ", total_correct/total_tested)
+        print("Accuracy of training set: ", total_correct/total_tested)
 
         # print(20, flush=True)
         #At the end of the epoch, do a pass on the validation set
@@ -312,6 +317,7 @@ def trainNet(net, batch_size, n_epochs, learning_rate):
         # j=0
         total_tested = 0
         total_correct = 0
+        net.training = False
         for inputs, labels in val_loader:
             # print(len(val_loader))
             # print(j)
@@ -348,16 +354,47 @@ def trainNet(net, batch_size, n_epochs, learning_rate):
             # print(20.6)
             # print(predicted_labels, true_labels)
         print("Accuracy of validation set: ", total_correct/total_tested)
-            
         print("Validation loss = {:.2f}".format(total_val_loss / len(val_loader)))
         
     print("Training finished, took {:.2f}s".format(time.time() - training_start_time))
 # print(12)
-CNN = SimpleCNN()
-# print(13)
-# TODO
-trainNet(CNN, batch_size=32, n_epochs=5, learning_rate=0.001) # TODO: Batchsize original was 32
-# print(14)
+print("\nweight_decay = 0, dropout = 0:\n")
+CNN0 = SimpleCNN()
+CNN0.dropout = 0
+trainNet(CNN0, batch_size=32, n_epochs=5, learning_rate=0.001, weight_decay=0.0) 
+torch.save(CNN0.state_dict(), './CNN0.pth')
 
-torch.save(CNN.state_dict(), './CNN.pth')
-  
+print("\nweight_decay = 0, dropout = 0.25\n")
+CNN1 = SimpleCNN()
+CNN1.dropout = .25
+trainNet(CNN1, batch_size=32, n_epochs=5, learning_rate=0.001, weight_decay=0.0) 
+torch.save(CNN1.state_dict(), './CNN1.pth')
+
+print("\nweight_decay = 0, dropout = 0.50\n")
+CNN2 = SimpleCNN()
+CNN2.dropout = .50
+trainNet(CNN2, batch_size=32, n_epochs=5, learning_rate=0.001, weight_decay=0.0)
+torch.save(CNN2.state_dict(), './CNN2.pth')
+
+
+print("\nweight_decay = 0.05, dropout = 0\n")
+CNN3 = SimpleCNN()
+CNN3.dropout = 0
+trainNet(CNN3, batch_size=32, n_epochs=5, learning_rate=0.001, weight_decay=0.05) 
+torch.save(CNN3.state_dict(), './CNN3.pth')
+
+print("\nweight_decay = 0.05, dropout = 0.25\n")
+CNN4 = SimpleCNN()
+CNN4.dropout = .25
+trainNet(CNN4, batch_size=32, n_epochs=5, learning_rate=0.001, weight_decay=0.05) 
+torch.save(CNN4.state_dict(), './CNN4.pth')
+
+print("\nweight_decay = 0.05, dropout = 0.50\n")
+CNN5 = SimpleCNN()
+CNN5.dropout = .50
+trainNet(CNN5, batch_size=32, n_epochs=5, learning_rate=0.001, weight_decay=0.05)
+torch.save(CNN5.state_dict(), './CNN5.pth')
+
+
+
+
