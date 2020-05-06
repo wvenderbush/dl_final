@@ -1,0 +1,264 @@
+
+weight_decay = 0.05, dropout = 0
+
+===== HYPERPARAMETERS =====
+batch_size= 32
+epochs= 5
+learning_rate= 0.001
+==============================
+Epoch 1, 2% 	 train_loss: 18.80 took: 8.27s
+Epoch 1, 4% 	 train_loss: 10.15 took: 7.82s
+Epoch 1, 6% 	 train_loss: 4.66 took: 7.70s
+Epoch 1, 8% 	 train_loss: 4.63 took: 7.64s
+Epoch 1, 10% 	 train_loss: 4.59 took: 7.63s
+Epoch 1, 13% 	 train_loss: 4.63 took: 7.63s
+Epoch 1, 15% 	 train_loss: 4.61 took: 7.63s
+Epoch 1, 17% 	 train_loss: 4.59 took: 7.63s
+Epoch 1, 19% 	 train_loss: 4.59 took: 7.62s
+Epoch 1, 21% 	 train_loss: 4.58 took: 7.63s
+Epoch 1, 23% 	 train_loss: 4.62 took: 7.58s
+Epoch 1, 26% 	 train_loss: 4.58 took: 7.59s
+Epoch 1, 28% 	 train_loss: 4.44 took: 7.59s
+Epoch 1, 30% 	 train_loss: 4.23 took: 7.58s
+Epoch 1, 32% 	 train_loss: 4.48 took: 7.57s
+Epoch 1, 34% 	 train_loss: 4.43 took: 7.56s
+Epoch 1, 36% 	 train_loss: 4.44 took: 7.57s
+Epoch 1, 39% 	 train_loss: 4.56 took: 7.58s
+Epoch 1, 41% 	 train_loss: 4.53 took: 7.57s
+Epoch 1, 43% 	 train_loss: 4.52 took: 7.58s
+Epoch 1, 45% 	 train_loss: 4.55 took: 7.57s
+Epoch 1, 47% 	 train_loss: 4.19 took: 7.58s
+Epoch 1, 50% 	 train_loss: 4.50 took: 7.58s
+Epoch 1, 52% 	 train_loss: 4.25 took: 7.59s
+Epoch 1, 54% 	 train_loss: 4.42 took: 7.73s
+Epoch 1, 56% 	 train_loss: 4.44 took: 7.60s
+Epoch 1, 58% 	 train_loss: 4.47 took: 7.59s
+Epoch 1, 60% 	 train_loss: 4.53 took: 7.57s
+Epoch 1, 63% 	 train_loss: 4.47 took: 7.56s
+Epoch 1, 65% 	 train_loss: 4.35 took: 7.61s
+Epoch 1, 67% 	 train_loss: 4.31 took: 7.60s
+Epoch 1, 69% 	 train_loss: 4.36 took: 7.60s
+Epoch 1, 71% 	 train_loss: 4.21 took: 7.62s
+Epoch 1, 73% 	 train_loss: 4.41 took: 7.59s
+Epoch 1, 76% 	 train_loss: 4.23 took: 7.63s
+Epoch 1, 78% 	 train_loss: 4.43 took: 7.61s
+Epoch 1, 80% 	 train_loss: 4.35 took: 7.61s
+Epoch 1, 82% 	 train_loss: 4.44 took: 7.61s
+Epoch 1, 84% 	 train_loss: 4.36 took: 7.60s
+Epoch 1, 86% 	 train_loss: 4.43 took: 7.60s
+Epoch 1, 89% 	 train_loss: 4.52 took: 7.59s
+Epoch 1, 91% 	 train_loss: 4.48 took: 7.60s
+Epoch 1, 93% 	 train_loss: 4.32 took: 7.56s
+Epoch 1, 95% 	 train_loss: 4.47 took: 7.54s
+Epoch 1, 97% 	 train_loss: 4.49 took: 7.33s
+Epoch 1, 100% 	 train_loss: 4.20 took: 5.88s
+Accuracy of training set:  0.17787640833048823
+Accuracy of Test set:  0.2328767123287671
+Test loss = 2.17
+Epoch 2, 2% 	 train_loss: 4.52 took: 8.10s
+Epoch 2, 4% 	 train_loss: 4.23 took: 7.62s
+Epoch 2, 6% 	 train_loss: 4.53 took: 7.61s
+Epoch 2, 8% 	 train_loss: 4.34 took: 7.59s
+Epoch 2, 10% 	 train_loss: 4.61 took: 7.61s
+Epoch 2, 13% 	 train_loss: 4.41 took: 7.60s
+Epoch 2, 15% 	 train_loss: 4.39 took: 7.60s
+Epoch 2, 17% 	 train_loss: 4.24 took: 7.57s
+Epoch 2, 19% 	 train_loss: 4.27 took: 7.58s
+Epoch 2, 21% 	 train_loss: 4.60 took: 7.57s
+Epoch 2, 23% 	 train_loss: 4.48 took: 7.58s
+Epoch 2, 26% 	 train_loss: 4.45 took: 7.58s
+Epoch 2, 28% 	 train_loss: 4.40 took: 7.59s
+Epoch 2, 30% 	 train_loss: 4.37 took: 7.58s
+Epoch 2, 32% 	 train_loss: 4.43 took: 7.59s
+Epoch 2, 34% 	 train_loss: 4.65 took: 7.58s
+Epoch 2, 36% 	 train_loss: 4.34 took: 7.59s
+Epoch 2, 39% 	 train_loss: 4.53 took: 7.59s
+Epoch 2, 41% 	 train_loss: 4.37 took: 7.58s
+Epoch 2, 43% 	 train_loss: 4.40 took: 7.58s
+Epoch 2, 45% 	 train_loss: 4.43 took: 7.59s
+Epoch 2, 47% 	 train_loss: 4.49 took: 7.60s
+Epoch 2, 50% 	 train_loss: 4.44 took: 7.59s
+Epoch 2, 52% 	 train_loss: 4.29 took: 7.58s
+Epoch 2, 54% 	 train_loss: 4.26 took: 7.61s
+Epoch 2, 56% 	 train_loss: 4.13 took: 7.58s
+Epoch 2, 58% 	 train_loss: 4.29 took: 7.61s
+Epoch 2, 60% 	 train_loss: 4.35 took: 7.60s
+Epoch 2, 63% 	 train_loss: 4.63 took: 7.59s
+Epoch 2, 65% 	 train_loss: 4.42 took: 7.60s
+Epoch 2, 67% 	 train_loss: 4.42 took: 7.61s
+Epoch 2, 69% 	 train_loss: 4.59 took: 7.60s
+Epoch 2, 71% 	 train_loss: 4.45 took: 7.60s
+Epoch 2, 73% 	 train_loss: 4.33 took: 7.59s
+Epoch 2, 76% 	 train_loss: 4.31 took: 7.60s
+Epoch 2, 78% 	 train_loss: 4.35 took: 7.61s
+Epoch 2, 80% 	 train_loss: 4.53 took: 7.62s
+Epoch 2, 82% 	 train_loss: 4.31 took: 7.62s
+Epoch 2, 84% 	 train_loss: 4.40 took: 7.61s
+Epoch 2, 86% 	 train_loss: 4.32 took: 7.61s
+Epoch 2, 89% 	 train_loss: 4.43 took: 7.59s
+Epoch 2, 91% 	 train_loss: 4.29 took: 7.59s
+Epoch 2, 93% 	 train_loss: 4.59 took: 7.60s
+Epoch 2, 95% 	 train_loss: 4.42 took: 7.53s
+Epoch 2, 97% 	 train_loss: 4.26 took: 7.32s
+Epoch 2, 100% 	 train_loss: 4.42 took: 5.88s
+Accuracy of training set:  0.20109252304540798
+Accuracy of Test set:  0.22945205479452055
+Test loss = 2.20
+Epoch 3, 2% 	 train_loss: 4.47 took: 8.13s
+Epoch 3, 4% 	 train_loss: 4.37 took: 7.64s
+Epoch 3, 6% 	 train_loss: 4.30 took: 7.64s
+Epoch 3, 8% 	 train_loss: 4.43 took: 7.61s
+Epoch 3, 10% 	 train_loss: 4.22 took: 7.61s
+Epoch 3, 13% 	 train_loss: 4.68 took: 7.61s
+Epoch 3, 15% 	 train_loss: 4.24 took: 7.59s
+Epoch 3, 17% 	 train_loss: 4.38 took: 7.60s
+Epoch 3, 19% 	 train_loss: 4.20 took: 7.60s
+Epoch 3, 21% 	 train_loss: 4.24 took: 7.60s
+Epoch 3, 23% 	 train_loss: 4.29 took: 7.61s
+Epoch 3, 26% 	 train_loss: 4.05 took: 7.60s
+Epoch 3, 28% 	 train_loss: 4.34 took: 7.61s
+Epoch 3, 30% 	 train_loss: 4.18 took: 7.60s
+Epoch 3, 32% 	 train_loss: 4.46 took: 7.61s
+Epoch 3, 34% 	 train_loss: 4.25 took: 7.61s
+Epoch 3, 36% 	 train_loss: 4.46 took: 7.61s
+Epoch 3, 39% 	 train_loss: 4.37 took: 7.61s
+Epoch 3, 41% 	 train_loss: 4.41 took: 7.62s
+Epoch 3, 43% 	 train_loss: 4.36 took: 7.60s
+Epoch 3, 45% 	 train_loss: 4.30 took: 7.59s
+Epoch 3, 47% 	 train_loss: 4.20 took: 7.60s
+Epoch 3, 50% 	 train_loss: 4.37 took: 7.56s
+Epoch 3, 52% 	 train_loss: 3.98 took: 7.57s
+Epoch 3, 54% 	 train_loss: 4.20 took: 7.59s
+Epoch 3, 56% 	 train_loss: 4.76 took: 7.58s
+Epoch 3, 58% 	 train_loss: 4.43 took: 7.58s
+Epoch 3, 60% 	 train_loss: 4.41 took: 7.58s
+Epoch 3, 63% 	 train_loss: 4.38 took: 7.59s
+Epoch 3, 65% 	 train_loss: 4.51 took: 7.58s
+Epoch 3, 67% 	 train_loss: 4.36 took: 7.59s
+Epoch 3, 69% 	 train_loss: 4.29 took: 7.56s
+Epoch 3, 71% 	 train_loss: 4.59 took: 7.58s
+Epoch 3, 73% 	 train_loss: 4.41 took: 7.61s
+Epoch 3, 76% 	 train_loss: 4.37 took: 7.72s
+Epoch 3, 78% 	 train_loss: 4.32 took: 7.62s
+Epoch 3, 80% 	 train_loss: 4.54 took: 7.69s
+Epoch 3, 82% 	 train_loss: 4.45 took: 7.58s
+Epoch 3, 84% 	 train_loss: 4.35 took: 7.59s
+Epoch 3, 86% 	 train_loss: 4.36 took: 7.58s
+Epoch 3, 89% 	 train_loss: 4.38 took: 7.60s
+Epoch 3, 91% 	 train_loss: 4.36 took: 7.58s
+Epoch 3, 93% 	 train_loss: 4.54 took: 7.61s
+Epoch 3, 95% 	 train_loss: 4.29 took: 7.55s
+Epoch 3, 97% 	 train_loss: 4.22 took: 7.35s
+Epoch 3, 100% 	 train_loss: 4.49 took: 5.88s
+Accuracy of training set:  0.21679754182314784
+Accuracy of Test set:  0.22945205479452055
+Test loss = 2.18
+Epoch 4, 2% 	 train_loss: 4.37 took: 8.06s
+Epoch 4, 4% 	 train_loss: 4.49 took: 7.64s
+Epoch 4, 6% 	 train_loss: 4.33 took: 7.69s
+Epoch 4, 8% 	 train_loss: 4.52 took: 7.64s
+Epoch 4, 10% 	 train_loss: 4.24 took: 7.64s
+Epoch 4, 13% 	 train_loss: 4.44 took: 7.60s
+Epoch 4, 15% 	 train_loss: 4.26 took: 7.60s
+Epoch 4, 17% 	 train_loss: 4.02 took: 7.63s
+Epoch 4, 19% 	 train_loss: 4.18 took: 7.63s
+Epoch 4, 21% 	 train_loss: 4.31 took: 7.59s
+Epoch 4, 23% 	 train_loss: 4.41 took: 7.58s
+Epoch 4, 26% 	 train_loss: 4.21 took: 7.66s
+Epoch 4, 28% 	 train_loss: 4.30 took: 7.59s
+Epoch 4, 30% 	 train_loss: 4.39 took: 7.57s
+Epoch 4, 32% 	 train_loss: 4.26 took: 7.62s
+Epoch 4, 34% 	 train_loss: 4.25 took: 7.57s
+Epoch 4, 36% 	 train_loss: 4.52 took: 7.58s
+Epoch 4, 39% 	 train_loss: 4.40 took: 7.57s
+Epoch 4, 41% 	 train_loss: 4.33 took: 7.58s
+Epoch 4, 43% 	 train_loss: 4.33 took: 7.60s
+Epoch 4, 45% 	 train_loss: 4.30 took: 7.59s
+Epoch 4, 47% 	 train_loss: 4.40 took: 7.59s
+Epoch 4, 50% 	 train_loss: 4.23 took: 7.57s
+Epoch 4, 52% 	 train_loss: 4.53 took: 7.58s
+Epoch 4, 54% 	 train_loss: 4.31 took: 7.59s
+Epoch 4, 56% 	 train_loss: 4.28 took: 7.61s
+Epoch 4, 58% 	 train_loss: 4.11 took: 7.60s
+Epoch 4, 60% 	 train_loss: 4.34 took: 7.60s
+Epoch 4, 63% 	 train_loss: 4.35 took: 7.60s
+Epoch 4, 65% 	 train_loss: 4.35 took: 7.59s
+Epoch 4, 67% 	 train_loss: 4.35 took: 7.58s
+Epoch 4, 69% 	 train_loss: 4.60 took: 7.62s
+Epoch 4, 71% 	 train_loss: 4.42 took: 7.59s
+Epoch 4, 73% 	 train_loss: 4.37 took: 7.61s
+Epoch 4, 76% 	 train_loss: 4.25 took: 7.60s
+Epoch 4, 78% 	 train_loss: 4.23 took: 7.59s
+Epoch 4, 80% 	 train_loss: 4.28 took: 7.61s
+Epoch 4, 82% 	 train_loss: 4.46 took: 7.63s
+Epoch 4, 84% 	 train_loss: 4.22 took: 7.61s
+Epoch 4, 86% 	 train_loss: 4.46 took: 7.60s
+Epoch 4, 89% 	 train_loss: 4.21 took: 7.59s
+Epoch 4, 91% 	 train_loss: 4.52 took: 7.60s
+Epoch 4, 93% 	 train_loss: 4.37 took: 7.56s
+Epoch 4, 95% 	 train_loss: 4.13 took: 7.52s
+Epoch 4, 97% 	 train_loss: 4.33 took: 7.36s
+Epoch 4, 100% 	 train_loss: 4.33 took: 5.84s
+Accuracy of training set:  0.2116763400477979
+Accuracy of Test set:  0.2363013698630137
+Test loss = 2.16
+Epoch 5, 2% 	 train_loss: 4.14 took: 8.10s
+Epoch 5, 4% 	 train_loss: 4.42 took: 7.67s
+Epoch 5, 6% 	 train_loss: 4.23 took: 7.65s
+Epoch 5, 8% 	 train_loss: 4.23 took: 7.59s
+Epoch 5, 10% 	 train_loss: 4.29 took: 7.61s
+Epoch 5, 13% 	 train_loss: 4.39 took: 7.59s
+Epoch 5, 15% 	 train_loss: 4.27 took: 7.61s
+Epoch 5, 17% 	 train_loss: 4.13 took: 7.63s
+Epoch 5, 19% 	 train_loss: 4.34 took: 7.64s
+Epoch 5, 21% 	 train_loss: 4.22 took: 7.65s
+Epoch 5, 23% 	 train_loss: 4.21 took: 7.68s
+Epoch 5, 26% 	 train_loss: 4.41 took: 7.67s
+Epoch 5, 28% 	 train_loss: 4.38 took: 7.65s
+Epoch 5, 30% 	 train_loss: 4.25 took: 7.63s
+Epoch 5, 32% 	 train_loss: 4.40 took: 7.61s
+Epoch 5, 34% 	 train_loss: 4.24 took: 7.62s
+Epoch 5, 36% 	 train_loss: 4.21 took: 7.67s
+Epoch 5, 39% 	 train_loss: 4.39 took: 7.64s
+Epoch 5, 41% 	 train_loss: 4.31 took: 7.64s
+Epoch 5, 43% 	 train_loss: 4.57 took: 7.67s
+Epoch 5, 45% 	 train_loss: 4.24 took: 7.74s
+Epoch 5, 47% 	 train_loss: 4.46 took: 7.70s
+Epoch 5, 50% 	 train_loss: 4.13 took: 7.64s
+Epoch 5, 52% 	 train_loss: 4.46 took: 7.67s
+Epoch 5, 54% 	 train_loss: 4.41 took: 7.65s
+Epoch 5, 56% 	 train_loss: 4.40 took: 7.67s
+Epoch 5, 58% 	 train_loss: 4.34 took: 7.67s
+Epoch 5, 60% 	 train_loss: 4.38 took: 7.65s
+Epoch 5, 63% 	 train_loss: 4.50 took: 7.66s
+Epoch 5, 65% 	 train_loss: 4.35 took: 7.60s
+Epoch 5, 67% 	 train_loss: 4.24 took: 7.57s
+Epoch 5, 69% 	 train_loss: 4.37 took: 7.62s
+Epoch 5, 71% 	 train_loss: 4.27 took: 7.58s
+Epoch 5, 73% 	 train_loss: 4.05 took: 7.62s
+Epoch 5, 76% 	 train_loss: 3.98 took: 7.61s
+Epoch 5, 78% 	 train_loss: 4.70 took: 7.64s
+Epoch 5, 80% 	 train_loss: 4.51 took: 7.64s
+Epoch 5, 82% 	 train_loss: 4.30 took: 7.61s
+Epoch 5, 84% 	 train_loss: 4.40 took: 7.64s
+Epoch 5, 86% 	 train_loss: 4.37 took: 7.72s
+Epoch 5, 89% 	 train_loss: 4.39 took: 7.66s
+Epoch 5, 91% 	 train_loss: 4.21 took: 7.66s
+Epoch 5, 93% 	 train_loss: 4.39 took: 7.75s
+Epoch 5, 95% 	 train_loss: 4.26 took: 7.62s
+Epoch 5, 97% 	 train_loss: 3.99 took: 7.32s
+Epoch 5, 100% 	 train_loss: 4.38 took: 5.88s
+Accuracy of training set:  0.2202116763400478
+Accuracy of Test set:  0.2226027397260274
+Test loss = 2.13
+Training finished, took 1808.61s
+Traceback (most recent call last):
+  File "net.py", line 392, in <module>
+    torch.save(CNN3.state_dict(), './v3/CNN3.pth')
+  File "/gpfs/ysm/project/amth/amth_ma885/conda_envs/notebook_env/lib/python3.8/site-packages/torch/serialization.py", line 369, in save
+    with _open_file_like(f, 'wb') as opened_file:
+  File "/gpfs/ysm/project/amth/amth_ma885/conda_envs/notebook_env/lib/python3.8/site-packages/torch/serialization.py", line 234, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "/gpfs/ysm/project/amth/amth_ma885/conda_envs/notebook_env/lib/python3.8/site-packages/torch/serialization.py", line 215, in __init__
+    super(_open_file, self).__init__(open(name, mode))
+FileNotFoundError: [Errno 2] No such file or directory: './v3/CNN3.pth'

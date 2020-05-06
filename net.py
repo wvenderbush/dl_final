@@ -1,9 +1,7 @@
-# 1) decide on size of the embedding layer
-# 2) figure out how to download images for training
-
 import numpy as np
 import torch
 import torchvision
+import os
 import torchvision.transforms as transforms
 
 
@@ -12,47 +10,16 @@ import torch.nn.functional as F
 from data_loader import PaintingDataset
 from torch.utils.data import random_split
 
-
-# seed = 42
-# np.random.seed(seed)
-# torch.manual_seed(seed)
-
 # A) LOADING THE DATA
 
-#The compose function allows for multiple transforms
-#transforms.ToTensor() converts our PILImage to a tensor of shape (C x H x W) in the range [0,1]
-#transforms.Normalize(mean,std) normalizes a tensor to a (mean, std) for (R, G, B)
-# print(1)
+
 transform = transforms.Compose([transforms.Resize((256, 256)), transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-# print(2)
 dataset = PaintingDataset(transform=transform)
 
 train_set, val_set, test_set = random_split(dataset, (int(len(dataset)*0.1),
                                                       int(len(dataset)*0.1),
                                                       len(dataset)-int(len(dataset)*0.1)-int(len(dataset)*0.1)))
 
-# print(type(train_set))
-# print(3)
-#train_set = dataset #TODO #torchvision.datasets.CIFAR10(root='./cifardata', train=True, download=True, transform=transform)
-# print(5)
-#test_set = dataset #TODO #torchvision.datasets.CIFAR10(root='./cifardata', train=False, download=True, transform=transform)
-# print(6)
-
-# trnsfrm = transforms.Resize((512, 512))
-# import matplotlib.pyplot as plt
-# # Check for scaling
-# plt.figure()
-
-# plt.subplot(1, 2, 1)
-
-# plt.imshow(dataset[0][0]) # PYPLOT WANTS AN img_obj as in __getitem__
-
-# plt.subplot(1, 2, 2)
-# sampleTransformed = trnsfrm(dataset[0][0])
-# plt.imshow(sampleTransformed)
-
-
-# plt.show()
 
 classes = {'1401-1450', '1451-1500', '1501-1550', '1551-1600',
            '1601-1650', '1651-1700', '1701-1750', '1751-1800', '1801-1850', '1851-1900'}
@@ -61,93 +28,57 @@ from torch.utils.data.sampler import SubsetRandomSampler
 
 n_samples = len(dataset)
 
-#Training
-#n_training_samples = n_samples*0.1 # TODO
 train_sampler = SubsetRandomSampler(np.arange(len(train_set), dtype=np.int64))
-# print(7)
-#Validation
-#n_val_samples = n_samples*0.01 # TODO
 val_sampler = SubsetRandomSampler(np.arange(len(val_set), dtype=np.int64))
-# print(8)
-#Test
-#n_test_samples = n_samples*0.01 # TODO
 test_sampler = SubsetRandomSampler(np.arange(len(test_set), dtype=np.int64))
-# print(9)
-# B) CLASS FOR CNN!!!
 
 
 class SimpleCNN(torch.nn.Module):
     
-    #Our batch shape for input x is (3, 32, 32)
     
     def __init__(self):
-        # print('a')
         super(SimpleCNN, self).__init__()
-        # print('b')
         self.training = True
         self.dropout = 0
         
         #256x256x3
         #Input channels = 3, output channels = 64
         self.conv1 = torch.nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1)
-        # print('c')
-        #256x256x64
         self.pool1 = torch.nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
-        # print('d')
         
-        #256x256x64
         self.conv2 = torch.nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1)
-        #512x512x64
         self.pool2 = torch.nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
         
         
         
-        ###128x128x64 input features, 64x128 output features (see sizing flow below)
-        self.fc1 = torch.nn.Linear(128 * 64 * 64, 128)
-        # print('e')
-        
-        ###256x64 input features, 64 output features (see sizing flow below)
+        self.fc1 = torch.nn.Linear(128 * 64 * 64, 128)        
         self.fc2 = torch.nn.Linear(128, 64)
-        # print('f')
-        ###FBAJDBCKJASVCDIJKNDLKCBADBCKASBJWB C   TODO   CHANGE THIS BACK
-        #64 input features, 18* output features for our 18* defined classes
         self.fc3 = torch.nn.Linear(64, 10)
-        # print('g')
-        
+
     def forward(self, x):
         
-        #Computes the activation of the first convolution
-        #Size changes from (3, 512, 512) to (64, 512, 512)
         x = F.relu(self.conv1(x))
         
-        #Size changes from (64, 512, 512) to (64, 256, 256)
         x = self.pool1(x)
 
         x = F.relu(self.conv2(x))
 
         x = self.pool2(x)
         
-        #Reshape data to input to the input layer of the neural net
-        #Size changes from (64, 256, 256) to (1, 64x256x256)
-        #Recall that the -1 infers this dimension from the other given dimension
         x = x.view(-1, 128 * 64 * 64)
         
-        #Computes the activation of the first fully connected layer
-        #Size changes from (1, 64x256x256) to (1, 64x256)
         x = F.relu(self.fc1(x))
 
-        x = F.dropout(x, training=self.training, p=self.dropout)
-        
-        #Computes the activation of the second fully connected layer
-        #Size changes from (1, 64x256) to (1, 64)
+        x = F.dropout(x, training=self.training, p=self.dropout) if self.training else x
+
         x = F.relu(self.fc2(x))
+
+        x = F.dropout(x, training=self.training, p=self.dropout) if self.training else x
         
-        #Computes the second fully connected layer (activation applied later)
-        #Size changes from (1, 64) to (1, 10)
         x = self.fc3(x)
+
         return(x)
 
-# print(10)
 def outputSize(in_size, kernel_size, stride, padding):
 
     output = int((in_size - kernel_size + 2*(padding)) / stride) + 1
@@ -178,31 +109,6 @@ def createLossAndOptimizer(net, learning_rate=0.001, weight_decay=0.0):
     
     return(loss, optimizer)
 
-# Dict = dict({'1401-1450': torch.tensor([1, 0, 0, 0, 0, 0, 0, 0, 0, 0]).double(),
-#             '1451-1500': torch.tensor([0, 1, 0, 0, 0, 0, 0, 0, 0, 0]).double(),
-#             '1501-1550': torch.tensor([0, 0, 1, 0, 0, 0, 0, 0, 0, 0]).double(),
-#             '1551-1600': torch.tensor([0, 0, 0, 1, 0, 0, 0, 0, 0, 0]).double(),
-#             '1601-1650': torch.tensor([0, 0, 0, 0, 1, 0, 0, 0, 0, 0]).double(),
-#             '1651-1700': torch.tensor([0, 0, 0, 0, 0, 1, 0, 0, 0, 0]).double(),
-#             '1701-1750': torch.tensor([0, 0, 0, 0, 0, 0, 1, 0, 0, 0]).double(),
-#             '1751-1800': torch.tensor([0, 0, 0, 0, 0, 0, 0, 1, 0, 0]).double(),
-#             '1801-1850': torch.tensor([0, 0, 0, 0, 0, 0, 0, 0, 1, 0]).double(),
-#             '1851-1900': torch.tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 1]).double()}) 
-
-
-# Dict = dict({'1401-1450': torch.tensor([1, 0, 0, 0, 0, 0, 0, 0, 0, 0]).double(),
-#             '1451-1500': torch.tensor([0, 1, 0, 0, 0, 0, 0, 0, 0, 0]).double(),
-#             '1501-1550': torch.tensor([0, 0, 1, 0, 0, 0, 0, 0, 0, 0]).double(),
-#             '1551-1600': torch.tensor([0, 0, 0, 1, 0, 0, 0, 0, 0, 0]).double(),
-#             '1601-1650': torch.tensor([0, 0, 0, 0, 1, 0, 0, 0, 0, 0]).double(),
-#             '1651-1700': torch.tensor([0, 0, 0, 0, 0, 1, 0, 0, 0, 0]).double(),
-#             '1701-1750': torch.tensor([0, 0, 0, 0, 0, 0, 1, 0, 0, 0]).double(),
-#             '1751-1800': torch.tensor([0, 0, 0, 0, 0, 0, 0, 1, 0, 0]).double(),
-#             '1801-1850': torch.tensor([0, 0, 0, 0, 0, 0, 0, 0, 1, 0]).double(),
-#             '1851-1900': torch.tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 1]).double()}) 
-
-
-## TODO
 Dict = {'1401-1450': 0,
              '1451-1500': 1,
              '1501-1550': 2,
@@ -215,7 +121,6 @@ Dict = {'1401-1450': 0,
              '1851-1900': 9}
 
 import time
-# print(11)
 def trainNet(net, batch_size, n_epochs, learning_rate, weight_decay):
     
     #Print all of the hyperparameters of the training iteration:
@@ -227,29 +132,27 @@ def trainNet(net, batch_size, n_epochs, learning_rate, weight_decay):
     
     #Get training data
     train_loader = get_train_loader(batch_size)
-    # print(15)
     n_batches = len(train_loader)
 
     #Create our loss and optimizer functions
     loss, optimizer = createLossAndOptimizer(net, learning_rate, weight_decay)
-    # print(16)
     #Time for printing
     training_start_time = time.time()
+    # f = torch.nn.LogSoftmax(dim=1)
     
     #Loop for n_epochs
     for epoch in range(n_epochs):
         net.training = True if net.dropout > 0 else False
-        # print (17)
+
         running_loss = 0.0
         print_every = 1#n_batches // 20
         start_time = time.time()
         total_train_loss = 0
-        # print(19)
-        # print(len(train_loader))
+
         total_tested = 0
         total_correct = 0
         for i, data in enumerate(train_loader):
-            # print(i)
+
             #Get inputs
             inputs, labels = data
             one_hot_labels = []
@@ -259,17 +162,9 @@ def trainNet(net, batch_size, n_epochs, learning_rate, weight_decay):
                 except KeyError:
                     continue
 
-            # for i in range(len(one_hot_labels)):
-                # one_hot_labels[i] = one_hot_labels[i].unsqueeze(0)
-            # print(one_hot_labels)
 
-            # labels = torch.cat(one_hot_labels, 0)
             labels = torch.tensor(one_hot_labels)
 
-            # print(19.1)
-            # print(inputs, flush=True)
-            # print(labels, flush=True)
-            
             #Wrap them in a Variable object
             inputs, labels = Variable(inputs), Variable(labels)
             # print(labels)
@@ -278,11 +173,9 @@ def trainNet(net, batch_size, n_epochs, learning_rate, weight_decay):
             optimizer.zero_grad()
             
             #Forward pass, backward pass, optimize
-            # print(19.2)
 
             outputs = net(inputs)
-            # print(torch.tensor([int(x.max(0)[1]) for x in outputs]))
-            # print(labels)
+            
             loss_size = loss(outputs, labels)
             loss_size.backward()
             optimizer.step()
@@ -299,7 +192,6 @@ def trainNet(net, batch_size, n_epochs, learning_rate, weight_decay):
             #Print statistics
             running_loss += loss_size.item()
             total_train_loss += loss_size.item()
-            # print(19.3)
             
             #Print every 10th batch of an epoch TODO
             if (i + 1) % (print_every + 1) == 0:
@@ -311,17 +203,12 @@ def trainNet(net, batch_size, n_epochs, learning_rate, weight_decay):
 
         print("Accuracy of training set: ", total_correct/total_tested)
 
-        # print(20, flush=True)
         #At the end of the epoch, do a pass on the validation set
         total_val_loss = 0
-        # j=0
         total_tested = 0
         total_correct = 0
         net.training = False
         for inputs, labels in val_loader:
-            # print(len(val_loader))
-            # print(j)
-            # j += 1
 
             one_hot_labels = []
             for label in labels:
@@ -329,17 +216,12 @@ def trainNet(net, batch_size, n_epochs, learning_rate, weight_decay):
                     one_hot_labels.append(Dict[label])
                 except KeyError:
                     continue
-            # print(20.1)
             labels = torch.tensor(one_hot_labels)
-            # print(20.2)
             
             #Wrap tensors in Variables
             inputs, labels = Variable(inputs), Variable(labels)
-            # print(20.3)
-            
             #Forward pass
             val_outputs = net(inputs)
-            # print(20.4)
             predicted_labels = torch.tensor([int(x.max(0)[1]) for x in val_outputs])
 
             true_labels = labels
@@ -349,51 +231,51 @@ def trainNet(net, batch_size, n_epochs, learning_rate, weight_decay):
                     total_correct += 1
 
             val_loss_size = loss(val_outputs, labels)
-            # print(20.5)
             total_val_loss += val_loss_size.item()
-            # print(20.6)
-            # print(predicted_labels, true_labels)
-        print("Accuracy of validation set: ", total_correct/total_tested)
-        print("Validation loss = {:.2f}".format(total_val_loss / len(val_loader)))
+
+        print("Accuracy of Test set: ", total_correct/total_tested)
+        print("Test loss = {:.2f}".format(total_val_loss / len(val_loader)))
         
     print("Training finished, took {:.2f}s".format(time.time() - training_start_time))
-# print(12)
-print("\nweight_decay = 0, dropout = 0:\n")
-CNN0 = SimpleCNN()
-CNN0.dropout = 0
-trainNet(CNN0, batch_size=32, n_epochs=5, learning_rate=0.001, weight_decay=0.0) 
-torch.save(CNN0.state_dict(), './CNN0.pth')
 
-print("\nweight_decay = 0, dropout = 0.25\n")
-CNN1 = SimpleCNN()
-CNN1.dropout = .25
-trainNet(CNN1, batch_size=32, n_epochs=5, learning_rate=0.001, weight_decay=0.0) 
-torch.save(CNN1.state_dict(), './CNN1.pth')
+case = int(os.environ.get('CASE'))
+if case == 0:
+    print("\nweight_decay = 0, dropout = 0:\n")
+    CNN0 = SimpleCNN()
+    CNN0.dropout = 0
+    trainNet(CNN0, batch_size=32, n_epochs=10, learning_rate=0.001, weight_decay=0.0) 
+    torch.save(CNN0.state_dict(), './v6/CNN0.pth')
+elif case == 1:
+    print("\nweight_decay = 0, dropout = 0.25\n")
+    CNN1 = SimpleCNN()
+    CNN1.dropout = .25
+    trainNet(CNN1, batch_size=32, n_epochs=10, learning_rate=0.001, weight_decay=0.0) 
+    torch.save(CNN1.state_dict(), './v6/CNN1.pth')
+elif case == 2:
+    print("\nweight_decay = 0, dropout = 0.50\n")
+    CNN2 = SimpleCNN()
+    CNN2.dropout = .50
+    trainNet(CNN2, batch_size=32, n_epochs=10, learning_rate=0.001, weight_decay=0.0)
+    torch.save(CNN2.state_dict(), './v6/CNN2.pth')
 
-print("\nweight_decay = 0, dropout = 0.50\n")
-CNN2 = SimpleCNN()
-CNN2.dropout = .50
-trainNet(CNN2, batch_size=32, n_epochs=5, learning_rate=0.001, weight_decay=0.0)
-torch.save(CNN2.state_dict(), './CNN2.pth')
-
-
-print("\nweight_decay = 0.05, dropout = 0\n")
-CNN3 = SimpleCNN()
-CNN3.dropout = 0
-trainNet(CNN3, batch_size=32, n_epochs=5, learning_rate=0.001, weight_decay=0.05) 
-torch.save(CNN3.state_dict(), './CNN3.pth')
-
-print("\nweight_decay = 0.05, dropout = 0.25\n")
-CNN4 = SimpleCNN()
-CNN4.dropout = .25
-trainNet(CNN4, batch_size=32, n_epochs=5, learning_rate=0.001, weight_decay=0.05) 
-torch.save(CNN4.state_dict(), './CNN4.pth')
-
-print("\nweight_decay = 0.05, dropout = 0.50\n")
-CNN5 = SimpleCNN()
-CNN5.dropout = .50
-trainNet(CNN5, batch_size=32, n_epochs=5, learning_rate=0.001, weight_decay=0.05)
-torch.save(CNN5.state_dict(), './CNN5.pth')
+elif case == 3:
+    print("\nweight_decay = 0.05, dropout = 0\n")
+    CNN3 = SimpleCNN()
+    CNN3.dropout = 0
+    trainNet(CNN3, batch_size=32, n_epochs=10, learning_rate=0.001, weight_decay=0.05) 
+    torch.save(CNN3.state_dict(), './v6/CNN3.pth')
+elif case == 4:
+    print("\nweight_decay = 0.05, dropout = 0.25\n")
+    CNN4 = SimpleCNN()
+    CNN4.dropout = .25
+    trainNet(CNN4, batch_size=32, n_epochs=10, learning_rate=0.001, weight_decay=0.05) 
+    torch.save(CNN4.state_dict(), './v6/CNN4.pth')
+elif case == 5:
+    print("\nweight_decay = 0.05, dropout = 0.50\n")
+    CNN5 = SimpleCNN()
+    CNN5.dropout = .50
+    trainNet(CNN5, batch_size=32, n_epochs=10, learning_rate=0.001, weight_decay=0.05)
+    torch.save(CNN5.state_dict(), './v6/CNN5.pth')
 
 
 
