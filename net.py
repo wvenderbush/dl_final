@@ -164,13 +164,13 @@ val_loader = torch.utils.data.DataLoader(train_set, batch_size=32, sampler=val_s
 
 import torch.optim as optim
 
-def createLossAndOptimizer(net, learning_rate=0.001):
+def createLossAndOptimizer(net, learning_rate=0.001, weight_decay=0.0):
     
     #Loss function
     loss = torch.nn.CrossEntropyLoss()
     
     #Optimizer
-    optimizer = optim.Adam(net.parameters(), lr=learning_rate)
+    optimizer = optim.Adam(net.parameters(), lr=learning_rate, weight_decay=weight_decay)
     
     return(loss, optimizer)
 
